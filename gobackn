@@ -1,0 +1,42 @@
+#include<iostream>
+#include<ctime>
+#include<cmath>
+#include <unistd.h>
+using namespace std;
+int main(){
+    int frames,win;
+    cout<<"Enter the frame size:\t";
+    cin>>frames;
+    int m;
+    cout<<"Enter the value of m (buffer size)\t";
+    cin>>m;
+    cout<<"The size of sender and receiver can be max: "<<pow(2,(m-1))<<"\n";
+    win=pow(2,(m-1));
+    int count=0;
+    for(int i=0;i<frames;){
+        int curr=0;
+        sleep(1);
+        for(int j=i;j<(win+i)&&j<frames;j++){
+            cout<<"Sending frame "<<(j+1)<<" to receiver\n";
+            count++;
+        }
+        sleep(2);
+        for(int j=i;j<(win+i)&&j<frames;j++){
+            int flag=rand()%5;
+            if(flag!=0){
+                cout<<"Acknowledgement for frame "<<(j+1)<<"\n";
+                curr++;
+            }
+            else{
+                cout<<"Negative acknowledgement of frame "<<(j+1)<<"\n";
+                cout<<"Resending window...\n\n";
+                curr=0;
+                break;
+            }
+        }
+        i+=curr;
+    }
+    cout<<"All frames sent successfully\n";
+    cout<<"Total transmissions:\t"<<count<<endl;
+    cout<<"Efficiency is: "<<((frames/(count*1.0))*100)<<"\n";
+}
